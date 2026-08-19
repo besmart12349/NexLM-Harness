@@ -1,6 +1,6 @@
 # NexLM Harness
 
-English | [\u4e2d\u6587](README.zh.md)
+English | [中文](README.zh.md)
 
 NexLM Harness is a standalone agent harness from [NexLM](https://nex-lm.vercel.app). It started from [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) and is being redefined as a more capable NexLM runtime.
 
@@ -8,7 +8,7 @@ It uses an architecture where **everything is a plugin**, and is powered by [Cor
 
 ## Status
 
-This repo is a standalone NexLM project. The codebase is iterating quickly. Compatibility-breaking changes are possible.
+This repo is a NexLM project. The codebase is iterating quickly. Compatibility-breaking changes are possible.
 
 ## Run
 
