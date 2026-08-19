@@ -69,7 +69,9 @@
   border: 1px solid var(--dsw-alias-border-l2-darkmode-thin);
   border-radius: 22px;
   background: var(--dsw-specific-input-major);
-  box-shadow: var(--dsw-shadow-lv2);
+  box-shadow:
+    0 18px 48px rgb(0 0 0 / 42%),
+    0 2px 10px rgb(0 0 0 / 24%);
   font-size: 16px;
   line-height: 24px;
   /* Elevated surface in dark, same as the menus: the draft scrollport inside
@@ -79,6 +81,9 @@
      (see ui-theme styles/scrollbar.css for the rebinding contract). */
   --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
   --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+
+  position: relative;
+  isolation: isolate;
 }
 
 /* No-workspace trigger state: dashed l4 stroke marks the card as a pick-a-
@@ -473,4 +478,34 @@
   background: rgba(216, 97, 97, 0.2);
   text-decoration: line-through;
   opacity: 0.7;
+}
+
+
+.card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -42px -56px;
+  pointer-events: none;
+  opacity: 0.13;
+  background:
+    repeating-radial-gradient(
+      circle at 50% 100%,
+      transparent 0 18px,
+      rgb(0 0 0 / 48%) 19px 20px,
+      transparent 21px 34px
+    ),
+    repeating-conic-gradient(
+      from 210deg at 50% 100%,
+      transparent 0deg 10deg,
+      rgb(0 0 0 / 34%) 11deg 12deg,
+      transparent 13deg 20deg
+    );
+  filter: blur(0.2px);
+  mask-image: radial-gradient(
+    ellipse 62% 50% at 50% 76%,
+    black 0%,
+    rgb(0 0 0 / 72%) 52%,
+    transparent 100%
+  );
 }
