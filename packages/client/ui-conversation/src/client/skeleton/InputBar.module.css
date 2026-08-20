@@ -482,7 +482,7 @@
     var(--dsw-shadow-lv2),
     0 0 0 1px rgb(59 130 246 / 48%),
     0 0 20px rgb(59 130 246 / 32%);
-  animation: composer-focus-glow 2.4s ease-in-out infinite;
+  animation: composer-focus-glow 800ms ease-out 1 both;
 }
 
 @keyframes composer-focus-glow {
