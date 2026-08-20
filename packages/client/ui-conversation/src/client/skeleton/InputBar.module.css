@@ -477,9 +477,35 @@
 
 
 .card:focus-within {
-  border-color: rgb(255 255 255 / 82%);
+  border-color: rgb(59 130 246 / 82%);
   box-shadow:
     var(--dsw-shadow-lv2),
-    0 0 0 1px rgb(255 255 255 / 34%),
-    0 0 18px rgb(255 255 255 / 18%);
+    0 0 0 1px rgb(59 130 246 / 48%),
+    0 0 20px rgb(59 130 246 / 32%);
+  animation: composer-focus-glow 800ms ease-out 1 both;
+}
+
+@keyframes composer-focus-glow {
+  0%, 100% {
+    border-color: rgb(59 130 246 / 72%);
+    box-shadow:
+      var(--dsw-shadow-lv2),
+      0 0 0 1px rgb(59 130 246 / 38%),
+      0 0 14px rgb(59 130 246 / 22%);
+  }
+
+  50% {
+    border-color: rgb(96 165 250 / 100%);
+    box-shadow:
+      var(--dsw-shadow-lv2),
+      0 0 0 2px rgb(96 165 250 / 58%),
+      0 0 30px rgb(37 99 235 / 48%),
+      0 0 56px rgb(59 130 246 / 22%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:focus-within {
+    animation: none;
+  }
 }

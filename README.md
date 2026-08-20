@@ -10,6 +10,22 @@ It uses an architecture where **everything is a plugin**, and is powered by [Cor
 
 This repo is a NexLM project. The codebase is iterating quickly. Compatibility-breaking changes are possible.
 
+## Roadmap
+
+Planned features for NexLM Harness include:
+
+- Ollama model manager: detect installed models, show capabilities, and switch models quickly.
+- Conversation folders, search, rename, pinning, and export/import.
+- Prompt presets for saving reusable system prompts and coding workflows.
+- Model comparison: send one prompt to multiple local models and compare results.
+- Built-in project context map with summaries of files, dependencies, and recent changes.
+- Tool activity timeline with clearer approval, cancellation, and retry controls.
+- Extension/plugin marketplace for providers, tools, themes, and workflows.
+- Local evaluation mode for testing models against a saved benchmark.
+- Better offline mode with clear model-loading and connection status.
+- Git workflow tools for branch creation, diff review, commit drafting, and PR preparation.
+- Built-in browser and live web view.
+
 ## Run
 
 ### Run from `npm`
