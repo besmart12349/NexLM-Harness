@@ -27,7 +27,6 @@ Planned features for NexLM Harness include:
 - Built-in browser and live web view.
 
 ## Run
-```
 
 The command starts the Web UI at `http://127.0.0.1:3080` by default. See [Web UI guide](docs/user/guide/index.md).
 
@@ -41,14 +40,15 @@ pnpm run build
 pnpm dsh web
 ```
 
-##UPDATING 
-'''
+## Updating
+
+```sh
 cd ~/NexLM-Harness
 git pull origin master
 pnpm install
 pnpm run build
 pnpm dsh web
-'''
+```
 
 ## Related
 
