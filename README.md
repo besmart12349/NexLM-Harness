@@ -4,6 +4,8 @@ NexLM Harness is a standalone agent harness from [NexLM](https://nex-lm.vercel.a
 
 It uses an architecture where **everything is a plugin**, and is powered by [Cordis](https://github.com/cordiverse/cordis).
 
+![NexLM Harness](NexLMHARNESS.png)
+
 ## Status
 
 This repo is a NexLM project. The codebase is iterating quickly. Compatibility-breaking changes are possible.
