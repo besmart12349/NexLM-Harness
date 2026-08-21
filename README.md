@@ -41,7 +41,7 @@ NexLM Harness ships with four built-in modes that recombine the same plugins for
 - File and terminal tools: file reading/searching/editing plus Bash (Linux/macOS) or PowerShell (Windows).
 - Built-in web search: uses NexLM's own search provider (OLLAMA) by default. Does require a OLLAMA search API key config. 
 - Subagents: a main agent can delegate subtasks to child agents for more complex workflows. Supports local OLLAMA as well. 
-- Agent presets and community plugins: you can save reusable agent configurations (tools + prompts) and install third-party plugins for extra ca
+- Agent presets and community plugins: you can save reusable agent configurations (tools + prompts) and install third-party plugins for extra capabilities. 
 
 ## Run
 
