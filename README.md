@@ -24,7 +24,23 @@ Planned features for NexLM Harness include:
 - Local evaluation mode for testing models against a saved benchmark.
 - Better offline mode with clear model-loading and connection status.
 - Git workflow tools for branch creation, diff review, commit drafting, and PR preparation.
-- Built-in browser and live web view.
+- Built-in browser and live web view- reflecting ChatGPT CODEX feature. 
+
+## Features
+NexLM Harness ships with four built-in modes that recombine the same plugins for different jobs:
+- Standard mode: full coding agent with file editing, shell access, file/web search, skills, planning, goals, subagents, and workflows.
+- Code mode: same capabilities as Standard, but tools are exposed through a Code Mode SDK so the model orchestrates multi-step tool calls via generated TypeScript rather than many separate calls.
+- Minimal mode: a stripped-down two-tool setup (persistent bash plus a str_replace_editor) — this is what DeepSeek itself uses for official model benchmarking.
+- Creator mode: lets you inspect the live runtime, test Cordis plugins in memory, and assemble your own custom modes.
+
+**Developer-Facing Features:** 
+- Local web UI: running pnpm dsh web opens a browser-based interface to manage models, sessions, workspaces, settings, and agents, rather than a CLI-only experience. Settings it as a PWA adds a more app native experience. 
+- Python SDK: lets you run Harness agents from Python scripts, tests, or automation pipelines.
+- Multi-provider support: not locked to NexLM models — you can plug in OpenAI, Anthropic, Ollama (recommended), or your own compatible/self-hosted endpoint via a YAML config file.
+- File and terminal tools: file reading/searching/editing plus Bash (Linux/macOS) or PowerShell (Windows).
+- Built-in web search: uses NexLM's own search provider (OLLAMA) by default. Does require a OLLAMA search API key config. 
+- Subagents: a main agent can delegate subtasks to child agents for more complex workflows. Supports local OLLAMA as well. 
+- Agent presets and community plugins: you can save reusable agent configurations (tools + prompts) and install third-party plugins for extra ca
 
 ## Run
 
