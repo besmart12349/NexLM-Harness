@@ -1,4 +1,4 @@
-# NexLM Harness
+# NexLM Harness 1.2.0
 
 NexLM Harness is a standalone agent harness from [NexLM](https://nex-lm.vercel.app). 
 
@@ -14,17 +14,18 @@ This repo is a NexLM project. The codebase is iterating quickly. Compatibility-b
 
 Planned features for NexLM Harness include:
 
-- Ollama model manager: detect installed models, show capabilities, and switch models quickly.
-- Conversation folders, search, rename, pinning, and export/import.
-- Prompt presets for saving reusable system prompts and coding workflows.
-- Model comparison: send one prompt to multiple local models and compare results.
-- Built-in project context map with summaries of files, dependencies, and recent changes.
+- Ollama model manager: detect installed models, show capabilities, and switch models quickly. (1.2.1)
+- Conversation folders, search, rename, pinning, and export/import. (1.2.1)
+- Prompt presets for saving reusable system prompts and coding workflows. (1.2.5)
+- Model comparison: send one prompt to multiple local OLLAMA models and compare results. (1.2.6)
+- Built-in project context map with summaries of files, dependencies, and recent changes. 
 - Tool activity timeline with clearer approval, cancellation, and retry controls.
 - Extension/plugin marketplace for providers, tools, themes, and workflows.
 - Local evaluation mode for testing models against a saved benchmark.
 - Better offline mode with clear model-loading and connection status.
-- Git workflow tools for branch creation, diff review, commit drafting, and PR preparation.
-- Built-in browser and live web view- reflecting ChatGPT CODEX feature. 
+- Git workflow tools for branch creation, diff review, commit drafting, and PR preparation. 
+- Built-in browser and live web view- reflecting ChatGPT CODEX feature. (1.3.0)
+- MLX support for optimized local mac inference. (1.3.0)
 
 ## Features
 NexLM Harness ships with four built-in modes that recombine the same plugins for different jobs:
