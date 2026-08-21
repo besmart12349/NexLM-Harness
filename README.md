@@ -70,7 +70,7 @@ pnpm dsh web
 ## Related
 
 - [NexLM](https://github.com/besmart12349/NexLM)
-- [PrismCLI](https://github.com/besmart12349/PrismCLI)
+- [NexCLI](https://github.com/besmart12349/NexCLI)
 - Original project: [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)
 
 ## Contributing
