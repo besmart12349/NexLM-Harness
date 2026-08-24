@@ -1,0 +1,27 @@
+{
+  "name": "@deepseek-ai/dsh-llm-ollama",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "workspace:*",
+    "@deepseek-ai/schemastery": "workspace:*",
+    "@deepseek-ai/dsh-llm": "workspace:*",
+    "@deepseek-ai/dsh-credentials": "workspace:*",
+    "@deepseek-ai/dsh-launch-environment": "workspace:*",
+    "@deepseek-ai/dsh-settings": "workspace:*",
+    "@deepseek-ai/dsh-timeout": "workspace:*",
+    "@deepseek-ai/dsh-anonymous-user-id": "workspace:*"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-test-support": "workspace:*",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}
