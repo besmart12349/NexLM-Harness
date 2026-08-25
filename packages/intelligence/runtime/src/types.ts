@@ -71,4 +71,5 @@ export interface IntelligenceRuntimeConfig {
   mode?: 'auto' | 'off' | 'required'
   intentUrl?: string
   probeTimeoutMs?: number
+  requestTimeoutMs?: number
 }
