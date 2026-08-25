@@ -28,8 +28,8 @@ const invocation = parseDshArgs(process.argv.slice(2), readVersion())
 
 switch (invocation.mode) {
   case 'profile': {
-    const { runProfile } = await import('./profile-boot.ts')
-    await runProfile({
+    const { runProfileWithIntelligence } = await import('./intelligence-boot.ts')
+    await runProfileWithIntelligence({
       environment: loadLayeredEnv('dsh'),
       profile: invocation.profile,
       patchFiles: invocation.patches,
