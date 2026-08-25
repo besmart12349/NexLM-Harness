@@ -11,6 +11,7 @@ export interface IntelligenceServiceConfig {
   mode?: 'auto' | 'off' | 'required'
   intentUrl?: string
   probeTimeoutMs?: number
+  requestTimeoutMs?: number
 }
 
 declare module '@deepseek-ai/cordis' {
@@ -35,6 +36,7 @@ export class IntelligenceService extends Service {
     ]),
     intentUrl: z.string(),
     probeTimeoutMs: z.number(),
+    requestTimeoutMs: z.number(),
   })
 
   readonly runtime: IntelligenceRuntime
