@@ -4,16 +4,9 @@ import { IconChevronDownOutline14, Menu } from '@deepseek-ai/dsh-client-ui-primi
 import type { IntentQuality, IntentSettingsFace } from '../../intent-settings.ts'
 import css from './IntentSettingsRow.module.css'
 
-export type IntentSettingsRowProps =
-  PropsRuntime<'settings.general.item'>
-  & PropsLocale<'conversation'>
-  & InjectFace<IntentSettingsFace>
+export type IntentSettingsRowProps = PropsRuntime<'settings.general.item'> & PropsLocale<'conversation'> & InjectFace<IntentSettingsFace>
 
-const QUALITY_LABELS: Record<IntentQuality, string> = {
-  fast: 'Fast',
-  balanced: 'Balanced',
-  max: 'Maximum',
-}
+const QUALITY_LABELS: Record<IntentQuality, string> = { fast: 'Fast', balanced: 'Balanced', max: 'Maximum' }
 
 function useSetting<T>(store: { getSnapshot(): T; subscribe(listener: () => void): () => void }): T {
   return useSyncExternalStore(store.subscribe.bind(store), store.getSnapshot.bind(store), store.getSnapshot.bind(store))
@@ -21,6 +14,7 @@ function useSetting<T>(store: { getSnapshot(): T; subscribe(listener: () => void
 
 export function IntentSettingsRow({
   enabled, path, manualModel, defaultQuality,
+  setEnabled, setPath, setManualModel, setDefaultQuality,
 }: IntentSettingsRowProps) {
   const isEnabled = useSetting(enabled)
   const pathValue = useSetting(path)
@@ -38,35 +32,19 @@ export function IntentSettingsRow({
           <div className={css.title}>NexLM Intent</div>
           <div className={css.desc}>Optional local planner for hardware-aware model routing.</div>
         </div>
-        <button
-          type="button"
-          className={css.toggle}
-          aria-pressed={isEnabled}
-          disabled={!recognized}
-          onClick={() => enabled.set(!isEnabled)}
-        >
+        <button type="button" className={css.toggle} aria-pressed={isEnabled} disabled={!recognized} onClick={() => setEnabled(!isEnabled)}>
           {isEnabled ? 'On' : 'Off'}
         </button>
       </div>
 
       <label className={css.field}>
         <span>Intent folder path</span>
-        <input
-          value={pathDraft}
-          onChange={event => setPathDraft(event.target.value)}
-          onBlur={() => path.set(pathDraft)}
-          placeholder="/path/to/NexLM-Intent"
-        />
+        <input value={pathDraft} onChange={event => setPathDraft(event.target.value)} onBlur={() => setPath(pathDraft)} placeholder="/path/to/NexLM-Intent" />
       </label>
 
       <label className={css.field}>
         <span>Manual model</span>
-        <input
-          value={modelDraft}
-          onChange={event => setModelDraft(event.target.value)}
-          onBlur={() => manualModel.set(modelDraft)}
-          placeholder="Optional provider:model"
-        />
+        <input value={modelDraft} onChange={event => setModelDraft(event.target.value)} onBlur={() => setManualModel(modelDraft)} placeholder="provider:model (optional)" />
       </label>
 
       <div className={css.inline}>
@@ -76,20 +54,11 @@ export function IntentSettingsRow({
           onClose={() => setQualityOpen(false)}
           items={(Object.keys(QUALITY_LABELS) as IntentQuality[]).map(value => ({ id: value, label: QUALITY_LABELS[value] }))}
           selectedId={quality}
-          onSelect={id => {
-            setQualityOpen(false)
-            defaultQuality.set(id as IntentQuality)
-          }}
+          onSelect={id => { setQualityOpen(false); setDefaultQuality(id as IntentQuality) }}
           align="end"
           portal
           anchor={(
-            <button
-              type="button"
-              className={css.selector}
-              aria-haspopup="menu"
-              aria-expanded={qualityOpen}
-              onClick={() => setQualityOpen(value => !value)}
-            >
+            <button type="button" className={css.selector} aria-haspopup="menu" aria-expanded={qualityOpen} onClick={() => setQualityOpen(value => !value)}>
               {QUALITY_LABELS[quality]}
               <IconChevronDownOutline14 className={css.chevron} />
             </button>
@@ -97,7 +66,7 @@ export function IntentSettingsRow({
         />
       </div>
 
-      {!recognized && <div className={css.desc}>Set the Intent folder path to enable Intent controls.</div>}
+      {!recognized && <div className={css.desc}>Set the Intent folder path to enable the Intent toggle.</div>}
       {modelValue !== modelDraft && <div className={css.desc}>Model changes apply when the field loses focus.</div>}
     </div>
   )
