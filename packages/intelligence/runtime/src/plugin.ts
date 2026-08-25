@@ -7,6 +7,7 @@ import {
   type ExecutionPlan,
   type IntelligenceRequest,
   type IntelligenceRuntime,
+  type ModelCandidate,
 } from './index.js'
 
 export interface IntelligenceServiceConfig {
@@ -32,24 +33,59 @@ function messageText(message: Message): string {
     .trim()
 }
 
-function latestPrompt(agent: Agent): string {
+function latestPrompt(agent: Agent): { prompt: string; hasImage: boolean } {
   const messages = agent.session.deriveMessages()
   for (let index = messages.length - 1; index >= 0; index -= 1) {
     const message = messages[index]
     if (message.role !== 'user') continue
-    const text = messageText(message)
-    if (text) return text
+    const prompt = messageText(message)
+    const hasImage = typeof message.content !== 'string'
+      && message.content.some((block) => block.type === 'image')
+    if (prompt || hasImage) return { prompt, hasImage }
   }
-  return ''
+  return { prompt: '', hasImage: false }
+}
+
+function inferCapabilities(model: string, inputModalities: readonly string[] | undefined): string[] {
+  const value = model.toLowerCase()
+  const capabilities = new Set<string>()
+  if (inputModalities?.includes('image')) capabilities.add('vision')
+  if (/code|coder|devstral/.test(value)) capabilities.add('codegen')
+  if (/reason|r1|gpt-oss/.test(value)) capabilities.add('reasoning')
+  if (/math|r1/.test(value)) capabilities.add('math')
+  if (capabilities.size === 0) capabilities.add('general')
+  capabilities.add('tool-calling')
+  return [...capabilities]
+}
+
+async function availableModels(ctx: Context): Promise<ModelCandidate[]> {
+  const candidates: ModelCandidate[] = []
+  for (const provider of ctx.llm.listProviders()) {
+    try {
+      const models = await ctx.llm.listModels(provider.id)
+      for (const model of models) {
+        candidates.push({
+          provider: model.provider,
+          model: model.id,
+          capabilities: inferCapabilities(model.id, model.inputModalities),
+          roles: inferCapabilities(model.id, model.inputModalities),
+          contextWindow: undefined,
+        })
+      }
+    } catch {
+      // Model catalogs are advisory. A provider without discoverable models
+      // must not make the optional intelligence layer fail the Harness request.
+    }
+  }
+  return candidates
 }
 
 /**
  * Harness's provider-neutral intelligence service.
  *
- * The service owns provider discovery and returns execution plans. AgentLoop
- * remains the executor; this service only participates in the existing
- * `agent/request` waterfall to select a primary route before the LLM adapter
- * is prepared.
+ * The service participates in the existing `agent/request` waterfall so a plan
+ * can select the primary route before the LLM adapter is prepared. Harness
+ * remains the executor and Intent remains an optional planner.
  */
 export class IntelligenceService extends Service {
   static Config: z<IntelligenceServiceConfig> = z.object({
@@ -76,15 +112,18 @@ export class IntelligenceService extends Service {
       const agent = ctx.agents.currentInitiator()
       if (agent === undefined) return proposed
 
-      const prompt = latestPrompt(agent)
-      if (!prompt) return proposed
+      const { prompt, hasImage } = latestPrompt(agent)
+      if (!prompt && !hasImage) return proposed
 
+      const candidates = await availableModels(ctx)
       const request: IntelligenceRequest = {
         prompt,
+        hasImage,
         currentModel: {
           provider: proposed.provider,
           model: proposed.model,
         },
+        models: candidates,
       }
       const plan = await this.analyze(request)
       payload.signal.throwIfAborted()
@@ -92,12 +131,10 @@ export class IntelligenceService extends Service {
     })
   }
 
-  /** Available providers in selection order. */
   get providers() {
     return this.runtime.providers
   }
 
-  /** Analyze a request and return a validated execution plan. */
   analyze(request: IntelligenceRequest): Promise<ExecutionPlan> {
     return this.runtime.analyze(request)
   }
