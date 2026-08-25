@@ -1,4 +1,4 @@
-import { useState, useSyncExternalStore } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import { IconChevronDownOutline14, Menu } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { IntentQuality, IntentSettingsFace } from '../../intent-settings.ts'
@@ -25,6 +25,15 @@ export function IntentSettingsRow({
   const [qualityOpen, setQualityOpen] = useState(false)
   const recognized = pathValue.trim() !== ''
 
+  useEffect(() => setPathDraft(pathValue), [pathValue])
+  useEffect(() => setModelDraft(modelValue), [modelValue])
+
+  const routing = !recognized
+    ? 'Not configured'
+    : isEnabled
+      ? 'Intent enabled'
+      : 'Intent disabled'
+
   return (
     <div className={css.row}>
       <div className={css.header}>
@@ -35,6 +44,12 @@ export function IntentSettingsRow({
         <button type="button" className={css.toggle} aria-pressed={isEnabled} disabled={!recognized} onClick={() => setEnabled(!isEnabled)}>
           {isEnabled ? 'On' : 'Off'}
         </button>
+      </div>
+
+      <div className={css.status}>
+        <span className={css.statusDot} data-active={recognized && isEnabled || undefined} />
+        <span>{routing}</span>
+        {recognized && <span className={css.statusMeta}>{quality} quality</span>}
       </div>
 
       <label className={css.field}>
@@ -66,7 +81,13 @@ export function IntentSettingsRow({
         />
       </div>
 
-      {!recognized && <div className={css.desc}>Set the Intent folder path to enable the Intent toggle.</div>}
+      <div className={css.summary}>
+        <div><span>Routing</span><strong>{isEnabled && recognized ? 'Automatic' : 'Manual / default'}</strong></div>
+        <div><span>Model</span><strong>{modelValue || 'Automatic'}</strong></div>
+        <div><span>Quality</span><strong>{QUALITY_LABELS[quality]}</strong></div>
+      </div>
+
+      {!recognized && <div className={css.desc}>Set the Intent folder path to enable Intent controls.</div>}
       {modelValue !== modelDraft && <div className={css.desc}>Model changes apply when the field loses focus.</div>}
     </div>
   )
