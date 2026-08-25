@@ -1,0 +1,33 @@
+{
+  "name": "@deepseek-ai/dsh-intelligence",
+  "description": "Provider-neutral intelligence planning seam with a built-in fallback and optional NexLM Intent bridge",
+  "version": "0.1.0-rc.7",
+  "publishConfig": { "access": "public" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/besmart12349/deepseek-harness.git",
+    "directory": "packages/intelligence/runtime"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": { "types": "./lib/types/index.d.ts", "default": "./lib/index.js" },
+    "./plugin": { "types": "./lib/types/plugin.d.ts", "default": "./lib/plugin.js" },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": ["lib/index.js", "lib/plugin.js", "lib/types/**/*.d.ts"],
+  "license": "MIT",
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-llm": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^",
+    "vitest": "^4.1.8"
+  }
+}
