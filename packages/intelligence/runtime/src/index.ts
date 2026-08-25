@@ -1,9 +1,9 @@
 import type {
   ExecutionPlan,
-  HardwareProfile,
   IntelligenceProvider,
   IntelligenceQuality,
   IntelligenceRequest,
+  IntelligenceRuntimeConfig,
   ModelCandidate,
   TaskKind,
 } from './types.js'
@@ -151,9 +151,7 @@ export interface IntelligenceRuntime {
   analyze(request: IntelligenceRequest): Promise<ExecutionPlan>
 }
 
-export function createIntelligenceRuntime(
-  config: import('./types.js').IntelligenceRuntimeConfig = {},
-): IntelligenceRuntime {
+export function createIntelligenceRuntime(config: IntelligenceRuntimeConfig = {}): IntelligenceRuntime {
   const mode = config.mode ?? 'auto'
   const builtin = new BuiltInIntelligenceProvider()
   const intent = new NexLMIntentProvider({
@@ -174,9 +172,9 @@ export function createIntelligenceRuntime(
       const provider = await this.selectProvider()
       try {
         return await provider.analyze(request)
-      } catch (error) {
+      } catch {
         if (provider.id === 'nexlm-intent' && mode === 'auto') return builtin.analyze(request)
-        throw error
+        throw new Error(`Intelligence provider '${provider.id}' failed`)
       }
     },
   }
