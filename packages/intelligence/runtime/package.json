@@ -13,13 +13,20 @@
   "types": "lib/types/index.d.ts",
   "exports": {
     ".": { "types": "./lib/types/index.d.ts", "default": "./lib/index.js" },
+    "./plugin": { "types": "./lib/types/plugin.d.ts", "default": "./lib/plugin.js" },
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "files": ["lib/index.js", "lib/types/**/*.d.ts"],
+  "files": ["lib/index.js", "lib/plugin.js", "lib/types/**/*.d.ts"],
   "license": "MIT",
-  "peerDependencies": { "@deepseek-ai/cordis": "workspace:^" },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^"
+  },
   "devDependencies": {
+    "@deepseek-ai/dsh-llm": "workspace:^",
     "@deepseek-ai/cordis": "workspace:^",
     "vitest": "^4.1.8"
   }
