@@ -24,10 +24,12 @@ type IntentUiSettings = {
   defaultQuality: 'fast' | 'balanced' | 'max'
 }
 
+type SettingsReadFace<T> = {
+  getSnapshot(): { value?: T }
+}
+
 declare module '@deepseek-ai/cordis' {
-  interface Context {
-    intelligence: IntelligenceService
-  }
+  interface Context { intelligence: IntelligenceService }
 }
 
 function messageText(message: Message): string {
@@ -92,12 +94,12 @@ export class IntelligenceService extends Service {
   })
 
   readonly runtime: IntelligenceRuntime
-  private readonly uiSettings: ReturnType<Context['settingsScope']['bind']<IntentUiSettings>>
+  private readonly uiSettings: SettingsReadFace<IntentUiSettings>
 
   constructor(ctx: Context, config: IntelligenceServiceConfig = {}) {
     super(ctx, 'intelligence')
     this.runtime = createIntelligenceRuntime(config)
-    this.uiSettings = ctx.settingsScope.bind<IntentUiSettings>({ namespace: 'nexlm-intent' })
+    this.uiSettings = ctx.settingsScope.bind<IntentUiSettings>({ namespace: 'nexlm-intent' }) as SettingsReadFace<IntentUiSettings>
 
     ctx.on('agent/request', async (payload, next) => {
       const proposed = await next()
@@ -105,10 +107,9 @@ export class IntelligenceService extends Service {
 
       const settings = this.uiSettings.getSnapshot().value
       const manualModel = parseManualModel(settings?.manualModel ?? '')
-      if (manualModel !== undefined && settings?.enabled === false) {
-        return { ...proposed, provider: manualModel.provider, model: manualModel.model }
+      if (settings?.enabled === false) {
+        return manualModel === undefined ? proposed : { ...proposed, provider: manualModel.provider, model: manualModel.model }
       }
-      if (settings?.enabled === false) return proposed
 
       const agent = ctx.agents.currentInitiator()
       if (agent === undefined) return manualModel === undefined ? proposed : { ...proposed, provider: manualModel.provider, model: manualModel.model }
@@ -121,7 +122,7 @@ export class IntelligenceService extends Service {
         prompt,
         hasImage,
         quality: settings?.defaultQuality ?? 'balanced',
-        currentModel: manualModel ?? { provider: proposed.provider, model: proposed.model },
+        currentModel: { provider: proposed.provider, model: proposed.model },
         models: candidates,
       }
       const plan = await this.analyze(request)
