@@ -59,7 +59,7 @@ describe('NexLMIntentProvider', () => {
     let probes = 0
     const provider = new NexLMIntentProvider({
       fetchImpl: async (url) => {
-        if (url.endsWith('/v1/hardware')) probes += 1
+        if (url.toString().endsWith('/v1/hardware')) probes += 1
         return new Response('ok', { status: 200 })
       },
     })
