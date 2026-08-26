@@ -39,7 +39,8 @@ function inferTask(prompt: string, hasImage: boolean): { kind: TaskKind; capabil
   if (unique.length === 0) return { kind: 'general', capabilities: ['tool-calling'] }
   if (unique.length > 1) return { kind: 'mixed', capabilities: unique }
 
-  return { kind: unique[0], capabilities: [unique[0], 'tool-calling'] }
+  const kind = unique[0]!
+  return { kind, capabilities: [kind, 'tool-calling'] }
 }
 
 function pickPrimary(
@@ -123,6 +124,7 @@ export class BuiltInIntelligenceProvider implements IntelligenceProvider {
     const task = inferTask(request.prompt, Boolean(request.hasImage))
     const candidates = request.models ?? []
     const primary = pickPrimary(request, task.kind, candidates)
+    const usableRamGb = request.hardware?.usableRamGb
 
     return {
       schemaVersion: 1,
@@ -143,7 +145,7 @@ export class BuiltInIntelligenceProvider implements IntelligenceProvider {
       },
       workers: [],
       constraints: {
-        usableRamGb: request.hardware?.usableRamGb,
+        ...(usableRamGb !== undefined ? { usableRamGb } : {}),
         maxParallel: 1,
       },
       confidence: candidates.length > 0 || request.currentModel ? 0.6 : 0.25,
@@ -246,9 +248,9 @@ export function createIntelligenceRuntime(config: IntelligenceRuntimeConfig = {}
   const mode = config.mode ?? 'auto'
   const builtin = new BuiltInIntelligenceProvider()
   const intent = new NexLMIntentProvider({
-    baseUrl: config.intentUrl,
-    probeTimeoutMs: config.probeTimeoutMs,
-    requestTimeoutMs: config.requestTimeoutMs,
+    ...(config.intentUrl !== undefined ? { baseUrl: config.intentUrl } : {}),
+    ...(config.probeTimeoutMs !== undefined ? { probeTimeoutMs: config.probeTimeoutMs } : {}),
+    ...(config.requestTimeoutMs !== undefined ? { requestTimeoutMs: config.requestTimeoutMs } : {}),
   })
   const providers = mode === 'off' ? [builtin] : [intent, builtin]
 
